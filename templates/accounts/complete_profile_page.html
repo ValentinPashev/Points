@@ -1,0 +1,15 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="container">
+        <form class="form-register-box-animation" method="POST" enctype="multipart/form-data">
+            <img src="{% static 'images/caduceus.png' %}" alt="Медицински символ" class="medical-symbol">
+            <h2 class="text-center mb-4">Registration</h2>
+            <form>
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn-register">Complete Profile</button>
+            </form>
+        </form>
+    </div>
+{% endblock %}

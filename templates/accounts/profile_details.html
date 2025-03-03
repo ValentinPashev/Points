@@ -1,0 +1,41 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="profile-container">
+        {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture" id="profilePic">
+        {% else %}
+            <img src="{% static 'images/def_picture.jpg' %}" alt="Profile Picture" class="profile-picture">
+        {% endif %}
+
+        <h2>{{ profile.first_name }} {{ profile.last_name }}</h2>
+        <p class="info"><i class="fas fa-id-badge"></i> Faculty number: {{ profile.faculty_number }}</p>
+        <p class="info"><i class="fas fa-book"></i> Branch: {{ profile.branch }}</p>
+        <p class="info"><i class="fas fa-star"></i> Points from events: <span
+                class="badge">{{ profile.points_from_events }}</span></p>
+        <a href="{% url 'profile-edit' profile.pk %}" class="edit-profile-btn">
+            <i class="fas fa-edit"></i> Edit Profile
+        </a>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <img class="modal-content" id="fullImage" alt="Profile Picture" src="{{ profile.profile_picture }}">
+    </div>
+    <a></a>
+    <script>
+        var modal = document.getElementById("imageModal");
+        var profilePic = document.getElementById("profilePic");
+        var fullImage = document.getElementById("fullImage");
+
+        profilePic.onclick = function () {
+            fullImage.src = profilePic.src;
+            modal.style.display = "flex";
+        }
+
+        // Затваряне при клик извън снимката
+        modal.onclick = function () {
+            modal.style.display = "none";
+        }
+    </script>
+{% endblock %}
