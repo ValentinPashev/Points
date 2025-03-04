@@ -1,11 +1,10 @@
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.forms import modelform_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-from accounts.forms import CustomStudentFrom, ProfileCreationForm, ProfileChangeForm, ChangePasswordForm
+from accounts.forms import CustomStudentFrom, ProfileCreationForm, ChangePasswordForm
 from accounts.models import Profile
 
 

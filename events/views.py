@@ -10,3 +10,7 @@ class CreateEventView(CreateView):
     form_class = EventCreateForm
     success_url = 'index'
     template_name = 'events/create-event.html'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user.email
+        return super().form_valid(form)

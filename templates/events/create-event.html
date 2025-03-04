@@ -1,0 +1,19 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h2>Create Event</h2>
+    <div class="universal-container-box">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-grid">
+                {% for field in form %}
+                    <div class="form-group {% if forloop.last and not forloop.counter|divisibleby:2 %}full-width{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Create Event</button>
+        </form>
+    </div>
+{% endblock %}

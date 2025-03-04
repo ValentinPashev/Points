@@ -1,0 +1,115 @@
+/* styles.css */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #f4f4f4;
+    --text-color: #333;
+    --border-radius: 8px;
+    --padding: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--secondary-color);
+    margin: 0;
+    padding: 0;
+}
+
+.universal-container-box {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: var(--padding);
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: var(--text-color);
+}
+
+/* Двуколонен дизайн за формите */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Две равни колони */
+    gap: 16px; /* Разстояние между полетата */
+}
+
+/* Стил за отделните групи */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Унифициране на височината на полетата */
+input, select, textarea {
+    width: 100%;
+    height: 44px; /* Всички полета ще бъдат еднакви */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    box-sizing: border-box; /* За да не се разширяват при padding */
+}
+/* Стилизиране на datetime-local input */
+input[type="datetime-local"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+/* При фокус */
+input[type="datetime-local"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Стилизиране на иконката за календар в някои браузъри */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    cursor: pointer;
+}
+
+/* Специален стил за textarea */
+textarea {
+    min-height: 80px; /* За да се вижда повече текст */
+    resize: vertical; /* Позволява промяна на размера само нагоре/надолу */
+}
+
+/* Ако броят на полетата е нечетен, последното заема цял ред */
+.form-grid .full-width {
+    grid-column: span 2;
+}
+
+/* Стил за бутона */
+button {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    margin-top: 16px;
+}
+
+button:hover {
+    background: #388E3C;
+}
+
+/* Адаптивен дизайн за малки екрани */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* При малки екрани формата става едноколонна */
+    }
+}

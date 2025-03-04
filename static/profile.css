@@ -206,7 +206,7 @@
 
 /*Change Password*/
 
-.change-password-container {
+.universal-container-box {
     max-width: 400px;
     background: rgba(255, 255, 255, 0.15);
     padding: 25px;
@@ -218,7 +218,7 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.change-password-container:hover {
+.universal-container-box:hover {
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(37, 117, 252, 0.6);
 }
