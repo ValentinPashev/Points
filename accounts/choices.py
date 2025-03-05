@@ -2,7 +2,7 @@ from django.db import models
 
 
 class BranchChoices(models.TextChoices):
-    ASMB_Sofia = 'АСМБ София', 'АСМБ София'
+    ASMB_SOFIA = 'АСМБ София', 'АСМБ София'
     ASMB_SU = 'АСМБ СУ', 'АСМБ СУ'
     ASMB_VARNA = 'АСМБ Варна', 'АСМБ Варна'
     ASM_PLOVDIV = 'АСМ Пловдив', 'АСМ Пловдив'

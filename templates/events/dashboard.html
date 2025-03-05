@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load static %}
 
 {% block content %}
   <h2>Dashboard</h2>
@@ -38,14 +39,12 @@
         {% if events %}
           <div class="events-list">
             {% for event in events %}
-              <div class="event-card"
-                   style="background-image: url('{% if event.created_by.profile.branch == 'Engineering' %}/static/images/engineering_bg.jpg{% elif event.created_by.profile.branch == 'Marketing' %}/static/images/marketing_bg.jpg{% elif event.created_by.profile.branch == 'Sales' %}/static/images/sales_bg.jpg{% else %}/static/images/default_bg.jpg{% endif %}');">
+              <div class="event-card" style="background-image: url('{{ event.get_background_image }}');">
                 <h4>{{ event.title }}</h4>
                 <p><strong>Created by:</strong> {{ event.created_by }}</p>
                 <p><strong>Location:</strong> {{ event.location }}</p>
                 <p><strong>Date:</strong> {{ event.date|date:"F j, Y, g:i a" }}</p>
                 <p><strong>Description:</strong> {{ event.description }}</p>
-                {# <a href="{% url 'event_detail' event.id %}" class="view-event-link">View Details</a> #}
               </div>
             {% endfor %}
           </div>

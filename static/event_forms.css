@@ -207,14 +207,19 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
-    width: 400px;
-    height: 500px;
+    width: 400px; /* Оригинална ширина */
+    height: 160px; /* 500px / 2.5 = 200px, но намаляваме още за по-голяма дължина спрямо височината */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .event-card:hover {
@@ -224,13 +229,15 @@ button:hover {
 
 .event-card h4 {
     margin-top: 0;
-    font-size: 20px;
+    font-size: 16px; /* Намален размер на шрифта */
     font-weight: bold;
 }
 
 .event-card p {
-    font-size: 14px;
+    font-size: 12px; /* Намален размер на шрифта */
     margin-bottom: 10px;
+    color: whitesmoke;
+
 }
 
 .event-card a {
