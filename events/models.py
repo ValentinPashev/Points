@@ -10,7 +10,7 @@ class Event(models.Model):
         max_length=100
     )
 
-    date = models.DateField(
+    date = models.DateTimeField(
 
     )
 
@@ -36,5 +36,7 @@ class Event(models.Model):
         max_length=100,
     )
 
+
     def __str__(self):
         return self.name
+

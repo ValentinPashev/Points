@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.templatetags.static import static
+
 from accounts.choices import BranchChoices
 from django.utils.translation import gettext_lazy as _
 from accounts.managers import AppStudentManager
@@ -77,6 +79,11 @@ class Profile(models.Model):
 
     profile_picture = models.ImageField(
         upload_to="media",
+        blank=True,
+        null=True,
+    )
+
+    background_picture = models.ImageField(
         blank=True,
         null=True,
     )

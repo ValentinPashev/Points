@@ -53,6 +53,7 @@ input, select, textarea {
     font-size: 16px;
     box-sizing: border-box; /* За да не се разширяват при padding */
 }
+
 /* Стилизиране на datetime-local input */
 input[type="datetime-local"] {
     width: 100%;
@@ -112,4 +113,146 @@ button:hover {
     .form-grid {
         grid-template-columns: 1fr; /* При малки екрани формата става едноколонна */
     }
+}
+
+
+/* Основен контейнер за Dashboard, с две колони */
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Лявата колона за търсачката */
+.search-column {
+    flex: 1 1 300px; /* Минимална ширина 300px */
+    max-width: 300px; /* Фиксирана или максимална ширина за търсачката */
+}
+
+/* Дясната колона за евентите */
+.events-column {
+    flex: 3 1 600px; /* Заема по-голяма част от пространството */
+}
+
+/* Стилове за търсачката */
+.search-form-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.search-form-container h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.search-form .form-group {
+    margin-bottom: 15px;
+}
+
+.search-form input,
+.search-form button {
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Advanced Search със details/summary */
+.advanced-search {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.9em;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.advanced-search summary {
+    list-style: none;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Стилове за евентите */
+.events-container {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.events-container h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.events-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Подравняване към дясно */
+}
+
+.event-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    height: 500px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.event-card h4 {
+    margin-top: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.event-card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.event-card a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 10px;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
 }

@@ -16,3 +16,15 @@ class EventCreateForm(BaseEventForm):
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        label='',
+        required=False,
+        max_length=55,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Search for event',
+            }
+        )
+    )
