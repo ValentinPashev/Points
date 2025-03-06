@@ -272,5 +272,23 @@ button:hover {
     box-shadow: 0 6px 12px rgba(37, 117, 252, 0.8);
 }
 
+input[type="text"] {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
 
 /**/

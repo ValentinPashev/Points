@@ -44,7 +44,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                    <a class="dropdown-item" href="{% url 'profile' user.pk %}">Profile</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{% url 'change-password' request.user.pk %}">Change Password</a>

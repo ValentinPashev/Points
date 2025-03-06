@@ -1,20 +1,20 @@
 from django.contrib.auth.views import PasswordChangeView
 from django.forms import modelform_factory
-from django.http import HttpResponseRedirect
 from accounts.decorators import user_not_authenticated
-from accounts.forms import CustomStudentFrom, ProfileCreationForm, ChangePasswordForm
+from accounts.forms import CustomStudentFrom, ChangePasswordForm
 from accounts.models import Profile
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.urls import reverse_lazy
 from django.views.generic import UpdateView
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
 from accounts.tokens import account_activation_token
+from django.contrib.auth.models import User
+from django.db.models import Q
+
 
 
 def activate(request, uidb64, token):
@@ -76,8 +76,17 @@ def register(request):
         context={"form": form}
         )
 
-def create_profile_or_display_view(request):
-    profile = request.user.profile
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+from .forms import ProfileCreationForm
+
+User = get_user_model()
+
+def profile_view(request, pk):
+    user = get_object_or_404(User, id=pk)
+    profile = user.profile
 
     is_profile_complete = all([
         profile.first_name,
@@ -86,29 +95,19 @@ def create_profile_or_display_view(request):
     ])
 
     if is_profile_complete:
-
-        context = {
-            'profile': profile,
-
-        }
+        context = {'profile': profile}
         return render(request, 'accounts/profile_details.html', context)
 
+    if request.method == 'POST':
+        form = ProfileCreationForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse_lazy('profile', args=[pk]))
     else:
-        print(request.FILES)
-        if request.method == 'POST':
-            form = ProfileCreationForm(request.POST, request.FILES, instance=profile)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse_lazy('profile'))
-        else:
-            form = ProfileCreationForm(instance=profile)
-            print(form.errors)
+        form = ProfileCreationForm(instance=profile)
 
-        context = {
-            'form': form,
-        }
-        return render(request, 'accounts/complete_profile_page.html', context)
-
+    context = {'form': form}
+    return render(request, 'accounts/complete_profile_page.html', context)
 
 class EditProfileView(UpdateView):
     model = Profile
@@ -125,3 +124,17 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy('index')
     template_name = 'accounts/change_password.html'
 
+
+
+def search_users_view(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        users = User.objects.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )
+    else:
+        users = User.objects.none()
+
+    context = {'users': users, 'query': query}
+    return render(request, 'accounts/profile_search.html', context)

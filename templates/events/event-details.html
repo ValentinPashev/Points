@@ -1,0 +1,66 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="event-container">
+
+        <div class="event-image-wrapper">
+            <img src="{{ event.get_background_image }}" alt="Event Image" class="event-image">
+        </div>
+
+        <div class="event-details">
+            <div class="event-left">
+                <div class="detail-box">
+                    <h1>{{ event.name }}</h1>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Date:</strong> {{ event.date|date:"F j, Y, g:i a" }}</p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Created by:</strong> {{ event.created_by }}</p>
+                </div>
+            </div>
+
+            <div class="event-right">
+                <div class="detail-box">
+                    <p><strong>Description:</strong> {{ event.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Events</a>
+        {% if user.is_authenticated and event.created_by == user.email %}
+            <a href="{% url 'edit-event' event.pk %}" class="btn btn-primary">
+                Edit Event <i class="fas fa-pencil-alt" style="margin-left: 5px;"></i>
+            </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'delete-event' event.pk %}" class="btn btn-primary">
+                Delete Event <i class="fas fa-trash-alt" style="margin-left: 5px;"></i>
+            </a>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const details = document.querySelectorAll(".detail-box");
+            const observer = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add("show");
+                            }, index * 300);
+                        }
+                    });
+                },
+                {threshold: 0.1}
+            );
+
+            details.forEach((detail) => observer.observe(detail));
+        });
+    </script>
+{% endblock %}

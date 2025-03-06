@@ -1,0 +1,33 @@
+{% extends "common/base.html" %}
+{% block content %}
+
+<div class="search-container">
+    <h2>Search Users</h2>
+
+    <!-- Форма за търсене -->
+    <form method="get" action="{% url 'profile_search' %}" class="search-form">
+        <input type="text" name="q" placeholder="Search by username or email..." value="{{ query }}">
+        <button type="submit">🔍 Search</button>
+    </form>
+
+    <!-- Показване на резултатите -->
+    {% if users %}
+        <div class="search-results">
+            <h3>Results:</h3>
+            <ul class="user-list">
+                {% for user in users %}
+                    <li class="user-card">
+                        <a href="{% url 'profile' user.id %}" class="user-link">
+                            <strong>{{ user.username }}</strong>  
+                            <span>{{ user.email }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="no-results">No users found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
