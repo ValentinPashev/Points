@@ -1,8 +1,8 @@
 {% extends 'common/base.html' %}
 {% load static %}
-
+ 
 {% block content %}
-  <h2>Dashboard</h2>
+  <h2>Upcoming Events</h2>
   
   <!-- Контейнер, който разделя търсачката и евентите -->
   <div class="dashboard-container">
@@ -40,11 +40,11 @@
           <div class="events-list">
             {% for event in events %}
               <div class="event-card" style="background-image: url('{{ event.get_background_image }}');">
-                <h4>{{ event.title }}</h4>
-                <p><strong>Created by:</strong> {{ event.created_by }}</p>
-                <p><strong>Location:</strong> {{ event.location }}</p>
-                <p><strong>Date:</strong> {{ event.date|date:"F j, Y, g:i a" }}</p>
-                <p><strong>Description:</strong> {{ event.description }}</p>
+                <h4>{{ event.name }}</h4>
+{#                <p><strong>Created by:</strong> {{ event.created_by }}</p>#}
+{#                <p><strong>Location:</strong> {{ event.location }}</p>#}
+{#                <p><strong>Date:</strong> {{ event.date|date:"F j, Y, g:i a" }}</p>#}
+{#                <p><strong>Description:</strong> {{ event.description }}</p>#}
               </div>
             {% endfor %}
           </div>

@@ -1,9 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from django.template.defaultfilters import slugify
-from django.templatetags.static import static
-
 from accounts.choices import BranchChoices
 from django.utils.translation import gettext_lazy as _
 from accounts.managers import AppStudentManager
@@ -20,6 +17,10 @@ class AppStudent(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
 
+    faculty_number = models.CharField(
+        max_length=25,
+        unique=True,
+    )
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -38,6 +39,7 @@ class AppStudent(AbstractBaseUser, PermissionsMixin):
     can_make_reports = models.BooleanField(
         default=False,
     )
+
 
     objects = AppStudentManager()
 
@@ -66,11 +68,6 @@ class Profile(models.Model):
     branch = models.CharField(
         max_length=25,
         choices=BranchChoices.choices,
-    )
-
-    faculty_number = models.CharField(
-        max_length=25,
-        unique=True,
     )
 
     points_from_events = models.IntegerField(

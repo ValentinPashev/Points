@@ -12,11 +12,11 @@
     <div class="container">
         <form class="form-register-box-animation" method="POST">
             <img src="{% static 'images/caduceus.png' %}" alt="Медицински символ" class="medical-symbol">
-            <h2 class="text-center mb-4">Registration</h2>
+            <h2 class="text-center mb-4">Login</h2>
             <form method="POST">
                 {% csrf_token %}
                 {{ form }}
-                <button type="submit" class="btn-register">Регистрирай се</button>
+                <button type="submit" class="btn-register">Login</button>
             </form>
         </form>
     </div>

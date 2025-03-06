@@ -229,8 +229,14 @@ button:hover {
 
 .event-card h4 {
     margin-top: 0;
-    font-size: 16px; /* Намален размер на шрифта */
+    font-size: 26px;
     font-weight: bold;
+    font-family: "Bebas Neue", sans-serif;
+    color: whitesmoke;
+    background-color: rgba(0, 0, 0, 0.5); /* Тъмен полупрозрачен фон */
+    display: inline-block; /* За да обхваща само текста */
+    padding: 5px 10px; /* Малко отстояние за по-добър ефект */
+    border-radius: 5px; /* Заоблени ръбове */
 }
 
 .event-card p {
