@@ -1,3 +1,4 @@
+/* Основен контейнер за формата */
 .form-register-box-animation {
     max-width: 350px;
     margin: 40px auto;
@@ -9,11 +10,14 @@
     transform: translateY(-20px);
     animation: fadeIn 1s ease-out forwards;
     text-align: center;
-    position: relative; /* Нужно за панделката */
-    z-index: 2; /* Формата трябва да е над фона */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центриране на съдържанието */
 }
 
-/* Fade-in ефект */
+/* Анимация за плавно появяване */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -25,53 +29,59 @@
     }
 }
 
-/* Етикети (labels) */
+/* Етикети */
 .form-register-box-animation label {
-    display: block;
     font-weight: bold;
     margin-bottom: 5px;
     text-align: left;
     width: 100%;
 }
 
-.form-register-box-animation img {
-    max-width: 100%; /* Гарантира, че изображението няма да надвишава контейнера */
-    height: auto; /* Поддържа пропорциите */
-    max-height: 150px; /* Намалява височината */
-    display: block;
-    margin: 0 auto 15px; /* Центриране с малко разстояние от полетата */
-    border-radius: 10px; /* Заоблени ъгли (по желание) */
-}
-
-/* Инпут полета */
+/* Унифицирани input полета */
 .form-register-box-animation input {
-    width: 100%;
-    padding: 10px;
+    width: 100%; /* Гарантирана равна ширина */
+    max-width: 280px; /* Задава еднаква ширина за всички */
+    padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 16px;
     transition: 0.3s;
+    text-align: left;
+    box-sizing: border-box; /* Предотвратява разлики в padding */
 }
 
-/* Когато потребителят цъкне на input */
+/* Фокус ефект за input полетата */
 .form-register-box-animation input:focus {
     border-color: #6a11cb;
     box-shadow: 0 0 8px rgba(106, 17, 203, 0.4);
     outline: none;
+    transform: scale(1.02);
+}
+
+/* Центриране на изображението */
+.form-register-box-animation img {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
+    display: block;
+    margin: 0 auto 15px;
+    border-radius: 10px;
 }
 
 /* Бутон за регистрация */
 .btn-register {
     background: linear-gradient(45deg, #6a11cb, #2575fc);
     color: white;
-    padding: 10px 20px;
+    padding: 12px;
     border-radius: 10px;
     transition: 0.3s;
     border: none;
     font-size: 16px;
+    max-width: 280px; /* Същият размер като input */
     width: 100%;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .btn-register:hover {

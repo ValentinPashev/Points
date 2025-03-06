@@ -1,4 +1,5 @@
 from django.contrib.auth.views import PasswordChangeView
+from django.core.exceptions import PermissionDenied
 from django.forms import modelform_factory
 from accounts.decorators import user_not_authenticated
 from accounts.forms import CustomStudentFrom, ChangePasswordForm
@@ -12,10 +13,15 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from accounts.tokens import account_activation_token
-from django.contrib.auth.models import User
 from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+from .forms import ProfileCreationForm
 
 
+User = get_user_model()
 
 def activate(request, uidb64, token):
     User = get_user_model()
@@ -76,14 +82,6 @@ def register(request):
         context={"form": form}
         )
 
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.contrib.auth import get_user_model
-from .forms import ProfileCreationForm
-
-User = get_user_model()
-
 def profile_view(request, pk):
     user = get_object_or_404(User, id=pk)
     profile = user.profile
@@ -112,12 +110,20 @@ def profile_view(request, pk):
 class EditProfileView(UpdateView):
     model = Profile
     template_name = 'accounts/update-profile.html'
-    success_url = reverse_lazy('profile')
     pk_url_kwarg = 'pk'
+
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'pk': self.object.pk})
 
     def get_form_class(self):
         return modelform_factory(Profile, fields=('first_name', 'last_name', 'branch', 'profile_picture'))
 
+    def get_object(self, queryset=None):
+        """ Позволява редактиране само на собствения профил """
+        obj = get_object_or_404(Profile, pk=self.kwargs['pk'])
+        if obj.user != self.request.user:
+            raise PermissionDenied
+        return obj
 
 class ChangePasswordView(PasswordChangeView):
     form_class = ChangePasswordForm
