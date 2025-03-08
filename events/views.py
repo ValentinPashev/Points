@@ -1,12 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.forms import modelform_factory
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.template.base import kwarg_re
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, FormView, ListView, DetailView, UpdateView, DeleteView
+import json
 from events.forms import EventCreateForm, SearchForm
-from events.models import Event
+from events.models import Event, FavouriteEvent
 
 
 # Create your views here.
@@ -25,16 +28,20 @@ class DashBoardView(ListView, FormView):
     template_name = 'events/dashboard.html'
     context_object_name = 'events'
     form_class = SearchForm
-    paginate_by = 8
+    paginate_by = 6
     model = Event
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
     def get_queryset(self):
         now = timezone.now()
-        events = Event.objects.filter(approved=True, date__gte=now)
+        events = Event.objects.filter(approved=True, date__gte=now).order_by('date')
 
         name = self.request.GET.get('name', '')
         location = self.request.GET.get('location', '')
@@ -47,7 +54,9 @@ class DashBoardView(ListView, FormView):
         if event_date:
             events = events.filter(date__date=event_date)
 
+
         return events
+
 
 class EventDetailsView(DetailView):
     model = Event
@@ -57,7 +66,16 @@ class EventDetailsView(DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Event, pk=self.kwargs['pk'])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
 
+        if user.is_authenticated:
+            context['is_favourite'] = FavouriteEvent.objects.filter(user=user, event=self.object).all()
+        else:
+            context['is_favourite'] = False
+
+        return context
 
 class EditEventView(UpdateView):
     model = Event
@@ -86,7 +104,38 @@ class DeleteEventView(DeleteView):
         event = self.get_object()
         profile = self.request.user
 
-        if event.created_by != profile.email and not self.request.user.is_superuser:
+        if event.created_by != profile.email and not self.request.user.is_superuser:  #Maybe it suppose to be OR instead of AND
+            # TODO: Test it!
             return HttpResponseForbidden("You do not have permission to delete this event.")
 
         return super().dispatch(request, *args, **kwargs)
+
+
+@csrf_protect
+@login_required
+@require_POST
+def toggle_favourite(request):
+    try:
+        data = json.loads(request.body)
+        event_id = data.get("event_id")
+
+        if not event_id:
+            return JsonResponse({"error": "Missing event ID"}, status=400)
+
+        event = Event.objects.get(pk=event_id)
+
+        favourite = FavouriteEvent.objects.filter(user=request.user, event=event)
+
+        if favourite.exists():
+            favourite.delete()
+            return JsonResponse({"message": "Removed from favourites", "favourite": False})
+
+        FavouriteEvent.objects.create(user=request.user, event=event)
+        return JsonResponse({"message": "Added to favourites", "favourite": True})
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Event.DoesNotExist:
+        return JsonResponse({"error": "Event not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

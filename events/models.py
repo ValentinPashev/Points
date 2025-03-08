@@ -62,3 +62,19 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+
+
+class FavouriteEvent(models.Model):
+    user = models.ForeignKey(
+        AppStudent,
+        on_delete=models.CASCADE,
+        related_name="favourite_events",
+    )
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="favourite_by",
+    )
+
+    class Meta:
+        unique_together = ('user', 'event')

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.core.exceptions import PermissionDenied
 from django.forms import modelform_factory
@@ -8,7 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import EmailMessage
@@ -18,6 +19,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
+
+from events.models import Event
 from .forms import ProfileCreationForm
 
 
@@ -93,7 +96,12 @@ def profile_view(request, pk):
     ])
 
     if is_profile_complete:
-        context = {'profile': profile}
+        favourite_events = Event.objects.filter(favourite_by__user=user)
+
+        context = {
+            'profile': profile,
+            'favourite_events': favourite_events
+        }
         return render(request, 'accounts/profile_details.html', context)
 
     if request.method == 'POST':
@@ -144,3 +152,5 @@ def search_users_view(request):
 
     context = {'users': users, 'query': query}
     return render(request, 'accounts/profile_search.html', context)
+
+

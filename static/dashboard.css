@@ -1,0 +1,70 @@
+/* Главен контейнер за търсачката и съдържанието */
+.content-page-container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start; /* Подравняване отгоре */
+}
+
+/* Лява колона: Търсачка */
+.content-search-column {
+    flex: 1;
+    max-width: 300px;
+}
+
+/* Дясна колона: Секция със съдържание */
+.content-list-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Контейнер за всички събития */
+.content-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Грид за събитията (2 по 2) */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 събития на ред */
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Карти на съдържанието */
+.content-card {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.content-card:hover {
+    transform: scale(1.05);
+}
+
+/* Заглавие върху картата */
+.content-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Линкове към съдържанието */
+.content-link {
+    text-decoration: none;
+    display: block;
+}
