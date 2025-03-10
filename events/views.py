@@ -46,6 +46,7 @@ class DashBoardView(ListView, FormView):
         name = self.request.GET.get('name', '')
         location = self.request.GET.get('location', '')
         event_date = self.request.GET.get('date', '')
+        branch = self.request.GET.get('branch', '')
 
         if name:
             events = events.filter(name__icontains=name)
@@ -53,7 +54,8 @@ class DashBoardView(ListView, FormView):
             events = events.filter(location__icontains=location)
         if event_date:
             events = events.filter(date__date=event_date)
-
+        if branch:
+            events = events.filter(branch=branch)
 
         return events
 
