@@ -4,7 +4,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, FormView, ListView, DetailView, UpdateView, DeleteView
 import json
@@ -20,8 +20,10 @@ class CreateEventView(CreateView):
     template_name = 'events/create-event.html'
 
     def form_valid(self, form):
+        user_profile = self.request.user.profile
         form.instance.created_by = self.request.user.email
-        return super().form_valid(form)
+        form.instance.branch = user_profile.branch
+        return super().form_valid(form) #:TODO synchronize poster and branch so there can not be made event without a certain user complite his profile!
 
 
 class DashBoardView(ListView, FormView):
@@ -141,3 +143,5 @@ def toggle_favourite(request):
         return JsonResponse({"error": "Event not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+

@@ -1,11 +1,11 @@
-{% include 'common/base.html' %}
+{% extends 'common/base.html' %}
 {% block content %}
     <h2>Search Users</h2>
-
-    <form method="get" action="{% url 'profile_search' %}">
+    <div class="search-container">
+    <form method="get" action="{% url 'profile_search' %}" class="search-form">
         <label for="search">Search Users:</label>
-        <input type="text" id="search" name="q" placeholder="Search by username or email">
+        <input type="text" id="search" name="q" placeholder="Search by username or email" class="search-container">
         <button type="submit">Search</button>
     </form>
-
+    </div>
 {% endblock %}

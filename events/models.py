@@ -45,6 +45,12 @@ class Event(models.Model):
         default=BranchChoices.ASMB_SU
     )
 
+    poster = models.ImageField(
+        upload_to="media",
+        blank=True,
+        null=True,
+    )
+
 
     def get_background_image(self):
 

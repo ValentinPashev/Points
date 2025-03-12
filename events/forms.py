@@ -11,7 +11,7 @@ class BaseEventForm(forms.ModelForm):
 class EventCreateForm(BaseEventForm):
     class Meta:
         model = Event
-        fields = ['name', 'date', 'description', 'location', 'type', 'branch']
+        fields = ['name', 'date', 'description', 'location', 'type', 'poster']
 
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
