@@ -1,7 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from accounts.choices import BranchChoices, RoleChoices
+from accounts.choices import BranchChoices, RoleChoices, CommitteeChoices
 from django.utils.translation import gettext_lazy as _
 from accounts.managers import AppStudentManager
 
@@ -80,15 +80,17 @@ class Profile(models.Model):
         null=True,
     )
 
-    background_picture = models.ImageField(
-        blank=True,
-        null=True,
-    )
-
     role = models.CharField(
         max_length=100,
         choices=RoleChoices.choices,
         default=RoleChoices.MEMBER
+    )
+
+    committee = models.CharField(
+        max_length=100,
+        choices=CommitteeChoices.choices,
+        default=CommitteeChoices.SCORA
+
     )
 
     def __str__(self):

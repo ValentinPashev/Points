@@ -1,7 +1,11 @@
 {% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
-        <div class="container">
+    <div class="container">
+        <div class="alert-info">
+            <strong>Note:</strong> In order to create events, you need to complete your profile information.
+        </div>
+
         <form class="form-register-box-animation" method="POST" enctype="multipart/form-data">
             <img src="{% static 'images/caduceus.png' %}" alt="Медицински символ" class="medical-symbol">
             <h2 class="text-center mb-4">Registration</h2>

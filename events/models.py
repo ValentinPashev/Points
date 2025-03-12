@@ -1,7 +1,7 @@
 from django.db import models
 from django.templatetags.static import static
 
-from accounts.choices import BranchChoices
+from accounts.choices import BranchChoices, CommitteeChoices
 from accounts.models import AppStudent, Profile
 from events.choices import TypeEventChoices
 
@@ -51,6 +51,12 @@ class Event(models.Model):
         null=True,
     )
 
+    committee = models.CharField(
+        max_length=100,
+        choices=CommitteeChoices.choices,
+        default=CommitteeChoices.SCORA
+
+    )
 
     def get_background_image(self):
 

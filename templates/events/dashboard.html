@@ -45,7 +45,7 @@
                         {% for event in page_obj %}
                             <a href="{% url 'event_detail' event.pk %}" class="content-link">
                                 <div class="content-card"
-                                     style="background-image: url('{{ event.poster }}');">
+                                     style="background-image: url('{{ event.poster.url }}');">
                                     <h4 class="content-title">{{ event.name }}</h4>
                                 </div>
                             </a>

@@ -24,7 +24,7 @@ class CustomStudentChangeForm(UserChangeForm):
 class ProfileCreationForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'branch', 'profile_picture')
+        fields = ('first_name', 'last_name', 'branch', 'profile_picture', 'committee')
 
 
 class ProfileChangeForm(forms.ModelForm):

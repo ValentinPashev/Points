@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.forms import modelform_factory
 from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
@@ -21,6 +21,12 @@ class CreateEventView(CreateView):
 
     def form_valid(self, form):
         user_profile = self.request.user.profile
+
+
+        if user_profile.branch is '':
+            return redirect('profile', pk=self.request.user.id)
+
+
         form.instance.created_by = self.request.user.email
         form.instance.branch = user_profile.branch
         return super().form_valid(form) #:TODO synchronize poster and branch so there can not be made event without a certain user complite his profile!

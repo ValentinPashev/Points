@@ -25,3 +25,12 @@ class RoleChoices(models.TextChoices):
     NORA = 'Nora', 'Nora'
     NORP = 'NorP', 'NorP'
     MEMBER = 'Member', 'Member'
+
+
+class CommitteeChoices(models.TextChoices):
+    SCOPE = 'Scope', 'Scope'
+    SCORA = 'Scora', 'Scora'
+    SCORE = 'Score', 'Score'
+    SCOME = 'Scome', 'Scome'
+    SCOPH = 'Scoph', 'Scoph'
+    SCORP = 'Scopr', 'Scopr'

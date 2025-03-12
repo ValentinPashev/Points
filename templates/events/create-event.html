@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Create Event</h2>
     <div class="universal-container-box">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
             <div class="form-grid">
                 {% for field in form %}
