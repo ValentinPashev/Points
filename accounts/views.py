@@ -1,5 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.core.exceptions import PermissionDenied
 from django.forms import modelform_factory
 from accounts.decorators import user_not_authenticated
@@ -9,7 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.views.generic import UpdateView, ListView
+from django.views.generic import UpdateView
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import EmailMessage
@@ -19,7 +18,6 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
-
 from events.models import Event
 from .forms import ProfileCreationForm
 
@@ -127,7 +125,6 @@ class EditProfileView(UpdateView):
         return modelform_factory(Profile, fields=('first_name', 'last_name', 'branch', 'profile_picture'))
 
     def get_object(self, queryset=None):
-        """ Позволява редактиране само на собствения профил """
         obj = get_object_or_404(Profile, pk=self.kwargs['pk'])
         if obj.user != self.request.user:
             raise PermissionDenied
@@ -138,6 +135,12 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy('index')
     template_name = 'accounts/change_password.html'
 
+
+class CustomResetPasswordView(PasswordResetView):
+    template_name = "registration/password_reset_form.html"  # Форма за reset
+    email_template_name = "registration/password_reset_email.html"  # Шаблон за имейла
+    subject_template_name = "registration/password_reset_subject.txt"  # Тема на имейла
+    success_url = reverse_lazy("password_reset_done")
 
 
 def search_users_view(request):
