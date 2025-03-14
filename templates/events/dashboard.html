@@ -43,12 +43,15 @@
                 {% if page_obj %}
                     <div class="content-grid">
                         {% for event in page_obj %}
+                            {% if not event.approved %}
+                            <a href="{% url 'approve' event.pk %}"><i class="ai-check"></i></a>
                             <a href="{% url 'event_detail' event.pk %}" class="content-link">
                                 <div class="content-card"
                                      style="background-image: url('{{ event.poster.url }}');">
                                     <h4 class="content-title">{{ event.name }}</h4>
                                 </div>
                             </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
 

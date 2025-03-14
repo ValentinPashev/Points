@@ -22,14 +22,13 @@ class CreateEventView(CreateView):
     def form_valid(self, form):
         user_profile = self.request.user.profile
 
-
-        if user_profile.branch is '':
+        if user_profile.branch == '':
             return redirect('profile', pk=self.request.user.id)
-
 
         form.instance.created_by = self.request.user.email
         form.instance.branch = user_profile.branch
-        return super().form_valid(form) #:TODO synchronize poster and branch so there can not be made event without a certain user complite his profile!
+        return super().form_valid(
+            form)  #:TODO synchronize poster and branch so there can not be made event without a certain user complite his profile!
 
 
 class DashBoardView(ListView, FormView):
@@ -49,7 +48,7 @@ class DashBoardView(ListView, FormView):
 
     def get_queryset(self):
         now = timezone.now()
-        events = Event.objects.filter(approved=True, date__gte=now).order_by('date')
+        events = Event.objects.filter(date__gte=now).order_by('date')
 
         name = self.request.GET.get('name', '')
         location = self.request.GET.get('location', '')
@@ -87,6 +86,7 @@ class EventDetailsView(DetailView):
 
         return context
 
+
 class EditEventView(UpdateView):
     model = Event
     template_name = 'events/edit_event.html'
@@ -114,7 +114,7 @@ class DeleteEventView(DeleteView):
         event = self.get_object()
         profile = self.request.user
 
-        if event.created_by != profile.email and not self.request.user.is_superuser:  #Maybe it suppose to be OR instead of AND
+        if event.created_by != profile.email and not self.request.user.is_superuser:  # Maybe it suppose to be OR instead of AND
             # TODO: Test it!
             return HttpResponseForbidden("You do not have permission to delete this event.")
 
@@ -151,3 +151,11 @@ def toggle_favourite(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+def approve(request, pk):
+    event = Event.objects.get(id=pk)
+    event.approved = True
+    event.save()
+
+    return redirect(request.META.get('HTTP_REFERER'))
+
+    # TODO: The events its set up as approved BUT i need to adjust it at the html because its not showing up properly and make a group with permissions who can approve and who can't

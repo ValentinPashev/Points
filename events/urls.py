@@ -1,4 +1,6 @@
 from django.urls import path, include
+
+from events import views
 from events.views import CreateEventView, DashBoardView, EventDetailsView, EditEventView, DeleteEventView, toggle_favourite
 
 urlpatterns = [
@@ -12,6 +14,7 @@ urlpatterns = [
     path('<int:pk>/', include([
         path('edit/', EditEventView.as_view(), name='edit-event'),
         path('delete/', DeleteEventView.as_view(), name='delete-event'),
+        path('approve/', views.approve, name='approve'),
     ]))
 
 ]
