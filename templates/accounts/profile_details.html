@@ -16,6 +16,8 @@
             <h2>{{ profile.first_name }} {{ profile.last_name }}</h2>
             <p class="info"><i class="fas fa-id-badge"></i> Faculty number: {{ profile.faculty_number }}</p>
             <p class="info"><i class="fas fa-book"></i> Branch: {{ profile.branch }}</p>
+            <p class="info"><i class="fas fa-pencil"></i> Role: {{ profile.role }}</p>
+            <p class="info"><i class="fas fa-bookmark"></i> Committee: {{ profile.committee }}</p>
             <p class="info"><i class="fas fa-star"></i> Points from events: <span class="badge">{{ profile.points_from_events }}</span></p>
             
             <a href="{% url 'profile-edit' profile.pk %}" class="edit-profile-btn">

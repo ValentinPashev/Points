@@ -40,6 +40,10 @@ class AppStudent(AbstractBaseUser, PermissionsMixin):
         default=False,
     )
 
+    can_approve_events = models.BooleanField(
+        default=False,
+    )
+
 
     objects = AppStudentManager()
 

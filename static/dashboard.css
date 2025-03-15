@@ -1,4 +1,4 @@
-/* Главен контейнер за търсачката и съдържанието */
+/* --- Главен контейнер за търсачката и съдържанието --- */
 .content-page-container {
     display: flex;
     gap: 30px;
@@ -33,6 +33,12 @@
     gap: 20px;
     width: 100%;
     max-width: 900px;
+}
+
+/* Контейнер за картата и иконката */
+.content-card-container {
+    position: relative;
+    width: 100%;
 }
 
 /* Карти на съдържанието */

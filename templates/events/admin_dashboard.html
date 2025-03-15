@@ -43,7 +43,7 @@
                 {% if page_obj %}
                     <div class="content-grid">
                         {% for event in page_obj %}
-                            {% if event.approved %}
+                            {% if not event.approved %}
                                 <div class="content-card-container">
                                     <!-- Линк към детайлите на събитието -->
                                     <a href="{% url 'event_detail' event.pk %}" class="content-link">

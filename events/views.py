@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.forms import modelform_factory
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -6,9 +7,10 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView, FormView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 import json
-from events.forms import EventCreateForm, SearchForm
+from events.forms import EventCreateForm
+from events.mixins import EventSearchMixin
 from events.models import Event, FavouriteEvent
 
 
@@ -31,40 +33,38 @@ class CreateEventView(CreateView):
             form)  #:TODO synchronize poster and branch so there can not be made event without a certain user complite his profile!
 
 
-class DashBoardView(ListView, FormView):
+class DashBoardView(EventSearchMixin, ListView):
     template_name = 'events/dashboard.html'
     context_object_name = 'events'
-    form_class = SearchForm
     paginate_by = 6
     model = Event
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
-        return super().form_valid(form)
+    def get_queryset(self):
+        now = timezone.now()
+        events = self.model.objects.filter(approved=True, date__gt=now)
+        return self.filter_events(events, self.request)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+
+class DashboardWithPermView(PermissionRequiredMixin, EventSearchMixin, ListView):
+    template_name = 'events/admin_dashboard.html'
+    context_object_name = 'events'
+    paginate_by = 6
+    model = Event
+    permission_required = 'events.can_approve_events'
+    success_url = reverse_lazy('index')
+
+    def handle_no_permission(self):
+        print(self.request.user.get_all_permissions())
+        return redirect('index')
 
     def get_queryset(self):
         now = timezone.now()
-        events = Event.objects.filter(date__gte=now).order_by('date')
+        user_profile = self.request.user.profile
+        events = self.model.objects.filter(approved=False, date__gt=now, committee=user_profile.committee)
 
-        name = self.request.GET.get('name', '')
-        location = self.request.GET.get('location', '')
-        event_date = self.request.GET.get('date', '')
-        branch = self.request.GET.get('branch', '')
+        return self.filter_events(events, self.request)
 
-        if name:
-            events = events.filter(name__icontains=name)
-        if location:
-            events = events.filter(location__icontains=location)
-        if event_date:
-            events = events.filter(date__date=event_date)
-        if branch:
-            events = events.filter(branch=branch)
-
-        return events
 
 
 class EventDetailsView(DetailView):

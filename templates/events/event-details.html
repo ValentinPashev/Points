@@ -44,6 +44,14 @@
                 Delete Event <i class="fas fa-trash-alt" style="margin-left: 5px;"></i>
             </a>
 
+            {% if not event.approved %}
+                {#                {% if 'events.can_approve_events' in request.user.get_group_permissions or perms.events.can_do_approve %}#}
+                <a href="{% url 'approve' event.pk %}" class="btn btn-primary">
+                    Approve Event <i class="bi bi-check-lg" style="margin-left: 5px;"></i>
+                </a>
+                {#                {% endif %}#}
+            {% endif %}
+
             <!-- 🔹 Динамичен бутон за "Добавяне/Премахване от любими" -->
             {% if is_favourite %}
                 <button id="fav-btn" class="btn btn-danger"

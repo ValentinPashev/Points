@@ -58,6 +58,10 @@ class Event(models.Model):
 
     )
 
+    completed = models.BooleanField(
+        default=False
+    )
+
     def get_background_image(self):
 
         branch_images = {
@@ -70,6 +74,12 @@ class Event(models.Model):
             "АСМБ Стара Загора": "universities/АСМБ Стара Загора.jpg",
         }
         return static(branch_images.get(self.branch, "images/branches/default_bg.jpg"))
+
+    class Meta:
+        permissions = [
+
+            ('can_approve_events', 'Can approve event'),
+        ]
 
     def __str__(self):
         return self.name
