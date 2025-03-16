@@ -54,6 +54,18 @@ class DashboardWithPermView(PermissionRequiredMixin, EventSearchMixin, ListView)
     permission_required = 'events.can_approve_events'
     success_url = reverse_lazy('index')
 
+    def has_permission(self):
+        user = self.request.user
+        if user.has_perm(self.permission_required):
+            return True
+
+        user_groups = user.groups.all()
+        for group in user_groups:
+            if group.permissions.filter(codename='can_approve_events').exists():
+                return True
+
+        return False
+
     def handle_no_permission(self):
         print(self.request.user.get_all_permissions())
         return redirect('index')
@@ -64,7 +76,6 @@ class DashboardWithPermView(PermissionRequiredMixin, EventSearchMixin, ListView)
         events = self.model.objects.filter(approved=False, date__gt=now, committee=user_profile.committee)
 
         return self.filter_events(events, self.request)
-
 
 
 class EventDetailsView(DetailView):
@@ -152,9 +163,15 @@ def toggle_favourite(request):
 
 
 def approve(request, pk):
-    event = Event.objects.get(id=pk)
-    event.approved = True
-    event.save()
+    event = get_object_or_404(Event, id=pk)
+    user = request.user
+
+    if user.can_approve_events or user.has_perm('events.can_approve_events'):
+        event.approved = True
+        event.save()
+
+    else:
+        return HttpResponseForbidden("You do not have permission to approve this event.")
 
     return redirect(request.META.get('HTTP_REFERER'))
 
