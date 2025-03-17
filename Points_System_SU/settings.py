@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'common.apps.CommonConfig',
     'rest_framework',
+    'reports.apps.ReportsConfig'
 
 ]
 

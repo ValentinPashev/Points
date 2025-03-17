@@ -51,7 +51,13 @@
                 </a>
                 {#                {% endif %}#}
             {% endif %}
-
+            
+            
+            
+            <a href="{% url 'fill-report' event.pk %}" class="btn btn-primary">
+                Make Report <i class="fas fa-pencil-alt" style="margin-left: 5px;"></i>
+            </a>
+            
             <!-- 🔹 Динамичен бутон за "Добавяне/Премахване от любими" -->
             {% if is_favourite %}
                 <button id="fav-btn" class="btn btn-danger"

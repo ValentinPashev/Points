@@ -1,0 +1,32 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<h2>Създаване на събитие</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="id_organizers">Организатори:</label>
+    <select id="id_organizers" name="organizers" multiple="multiple" class="select2"></select>
+    <button type="submit">Запази</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            ajax: {
+                url: "{% url 'profile_autocomplete' %}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return { term: params.term };
+                },
+                processResults: function (data) {
+                    return { results: data };
+                },
+                cache: true
+            },
+            minimumInputLength: 1,  // Започва търсенето след 1 буква
+            maximumSelectionLength: 3  // Лимит до 3 избрани профила
+        });
+    });
+</script>
+{% endblock %}
