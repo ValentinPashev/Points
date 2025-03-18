@@ -13,7 +13,7 @@
     $(document).ready(function() {
         $('.select2').select2({
             ajax: {
-                url: "{% url 'profile_autocomplete' %}",
+                url: "{% url 'user_autocomplete' %}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

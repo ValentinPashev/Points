@@ -30,7 +30,6 @@ class FillReport(UpdateView):
 
 
 def user_autocomplete(request):
-    """Търси потребители по имейл за autocomplete."""
     query = request.GET.get('term', '')
     users = AppStudent.objects.filter(email__icontains=query)[:10]
     results = [{'id': user.id, 'text': user.email} for user in users]
