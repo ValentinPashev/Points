@@ -7,4 +7,6 @@ from reports.models import EventReport
 @receiver(post_save, sender=Event)
 def create_event_report(sender, instance, created, **kwargs):
     if created:
-        EventReport.objects.create(event=instance)
+        EventReport.objects.create(event=instance,
+                                   branch=instance.branch,
+                                   committee=instance.committee,)

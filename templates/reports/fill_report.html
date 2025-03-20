@@ -1,32 +1,68 @@
 {% extends 'common/base.html' %}
+{% load rest_framework %}
 
 {% block content %}
-<h2>Създаване на събитие</h2>
-<form method="post">
-    {% csrf_token %}
-    <label for="id_organizers">Организатори:</label>
-    <select id="id_organizers" name="organizers" multiple="multiple" class="select2"></select>
-    <button type="submit">Запази</button>
-</form>
+    <div class="form-report-container">
+        <h2 class="form-report-title">Попълване на отчет за събитието: {{ form.instance.event.name }}</h2>
+        <form method="post">
+            {% csrf_token %}
 
-<script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            ajax: {
-                url: "{% url 'user_autocomplete' %}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return { term: params.term };
-                },
-                processResults: function (data) {
-                    return { results: data };
-                },
-                cache: true
-            },
-            minimumInputLength: 1,  // Започва търсенето след 1 буква
-            maximumSelectionLength: 3  // Лимит до 3 избрани профила
+            <div class="form-report-group">
+                <label class="form-report-label" for="id_organizers">Организатори:</label>
+                <select id="id_organizers" name="organizers" multiple="multiple" class="select2"></select>
+            </div>
+
+            <div class="form-report-group">
+                <label class="form-report-label" for="id_prepared">Подготвил:</label>
+                <select id="id_prepared" name="prepared" class="select2"></select>
+            </div>
+
+            <div class="form-report-group">
+                <label class="form-report-label" for="id_attended">Присъствали:</label>
+                <select id="id_attended" name="attended" multiple="multiple" class="select2"></select>
+            </div>
+
+            <div class="form-report-group">
+                <label class="form-report-label" for="id_participated_actively">Активни участници:</label>
+                <select id="id_participated_actively" name="participated_actively" multiple="multiple" class="select2"></select>
+            </div>
+
+            <button type="submit" class="form-report-button">Запази</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function setupSelect2(selector, url, maxSelections) {
+                $(selector).select2({
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {term: params.term};
+                        },
+                        processResults: function (data) {
+                            return {results: data};
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 1,
+                    maximumSelectionLength: maxSelections,
+                    placeholder: "Търсете потребители...",
+                    allowClear: true,
+                    theme: "default"
+                });
+            }
+
+            setupSelect2('#id_organizers', "{% url 'user_autocomplete' %}", 3);
+            setupSelect2('#id_prepared', "{% url 'user_autocomplete' %}", 1);
+            setupSelect2('#id_attended', "{% url 'user_autocomplete' %}", 10);
+            setupSelect2('#id_participated_actively', "{% url 'user_autocomplete' %}", 10);
         });
-    });
-</script>
+    </script>
 {% endblock %}

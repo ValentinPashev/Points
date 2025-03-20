@@ -13,7 +13,12 @@ class EventReportForm(forms.ModelForm):
 
     class Meta:
         model = EventReport
-        fields = ['event', 'organizers', 'number_of_days', 'prepared', 'attended', 'participated_actively']
+        fields = ['event', 'organizers', 'number_of_days', 'prepared', 'attended', 'participated_actively',
+                  'points_for_organizers',
+                  'points_for_prepared',
+                  'points_for_participated_actively',
+                  'points_for_attended']
+
 
     def clean_organizers(self):
         organizers = self.cleaned_data.get('organizers')
