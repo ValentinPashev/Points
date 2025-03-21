@@ -1,60 +1,46 @@
 from django.db import models
+from django.contrib.auth.models import User
+from accounts.models import Profile, AppStudent
 
-from accounts.choices import BranchChoices, CommitteeChoices
-from accounts.models import Profile
-from events.models import Event
 
 class EventReport(models.Model):
     event = models.OneToOneField(
-        Event,
-        on_delete=models.CASCADE,
-        related_name='reports'
+        'events.Event', on_delete=models.CASCADE, related_name='reports'
     )
-
-    organizers = models.ManyToManyField(
-        Profile,
-        related_name='organized_events'
-    )
-
-    prepared = models.ForeignKey(
-        Profile,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='prepared_reports'
-    )
-
-    attended = models.ManyToManyField(
-        Profile,
-        related_name='attended_events',
-        blank=True
-    )
-
-    participated_actively = models.ManyToManyField(
-        Profile,
-        related_name='active_participants',
-        blank=True
-    )
+    organizers = models.ManyToManyField(Profile, related_name='organized_events')
+    prepared = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='prepared_reports')
+    attended = models.ManyToManyField(Profile, related_name='attended_events', blank=True)
+    participated_actively = models.ManyToManyField(Profile, related_name='active_participants', blank=True)
 
     number_of_days = models.IntegerField(default=0)
     completed = models.BooleanField(default=False)
 
-    points_for_organizers = models.IntegerField(default=0)
-    points_for_prepared = models.IntegerField(default=0)
-    points_for_attended = models.IntegerField(default=0)
-    points_for_participated_actively = models.IntegerField(default=0)
+    points_for_organizers = models.IntegerField(default=10)
+    points_for_prepared = models.IntegerField(default=5)
+    points_for_attended = models.IntegerField(default=2)
+    points_for_participated_actively = models.IntegerField(default=3)
 
-    branch = models.CharField(
-        max_length=100,
-        choices=BranchChoices.choices,
-        default=BranchChoices.ASMB_SU
-    )
+    def distribute_points(self, approved_by: AppStudent):
+        """Разпределя точки към участниците в отчета, само ако е одобрен"""
+        if not self.completed:
+            raise ValueError("Отчетът не е маркиран като завършен!")
 
-    committee = models.CharField(
-        max_length=100,
-        choices=CommitteeChoices.choices,
-        default=CommitteeChoices.SCORA
-    )
+        for organizer in self.organizers.all():
+            organizer.points += self.points_for_organizers
+            organizer.save()
 
-    def __str__(self):
-        return f"Отчет за {self.event.name}"
+        if self.prepared:
+            self.prepared.points_from_events += self.points_for_prepared
+            self.prepared.save()
+
+        for attendee in self.attended.all():
+            attendee.points += self.points_for_attended
+            attendee.save()
+
+        for participant in self.participated_actively.all():
+            participant.points += self.points_for_participated_actively
+            participant.save()
+
+        self.completed = True
+        self.save()

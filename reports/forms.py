@@ -1,27 +1,31 @@
 from django import forms
-from accounts.models import AppStudent
+from django.core.exceptions import ValidationError
+from accounts.models import Profile
 from .models import EventReport
 
 class EventReportForm(forms.ModelForm):
-    organizers = forms.ModelMultipleChoiceField(
-        queryset=AppStudent.objects.all(),
-        widget=forms.SelectMultiple(attrs={
-            'class': 'autocomplete',
-            'data-max-selections': '3'
-        })
+    organizers_emails = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Въведете имейли, разделени със запетая'})
+    )
+    prepared_email = forms.EmailField(required=False)
+    attended_emails = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Въведете имейли, разделени със запетая'}),
+        required=False
+    )
+    participated_actively_emails = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Въведете имейли, разделени със запетая'}),
+        required=False
     )
 
     class Meta:
         model = EventReport
-        fields = ['event', 'organizers', 'number_of_days', 'prepared', 'attended', 'participated_actively',
-                  'points_for_organizers',
-                  'points_for_prepared',
-                  'points_for_participated_actively',
-                  'points_for_attended']
+        fields = [
+            'number_of_days',
+            'points_for_organizers',
+            'points_for_prepared',
+            'points_for_attended',
+            'points_for_participated_actively',
+            'completed'
+        ]
 
 
-    def clean_organizers(self):
-        organizers = self.cleaned_data.get('organizers')
-        if organizers and organizers.count() > 3:
-            raise forms.ValidationError("Може да изберете максимум 3 организатори.")
-        return organizers
